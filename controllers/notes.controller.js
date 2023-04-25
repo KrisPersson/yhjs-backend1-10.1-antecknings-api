@@ -45,6 +45,7 @@ async function editNotesCtrl(request, response) {
 async function deleteNotesCtrl(request, response) {
     const body = request.body
     try {
+        await findUser(body.username)
         await deleteNote(body)
         response.json({ success: true, message: 'Note successfully deleted!' })
     } catch (error) {

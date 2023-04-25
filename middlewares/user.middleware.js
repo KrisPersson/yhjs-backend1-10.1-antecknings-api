@@ -17,8 +17,9 @@ async function checkUserInput(request, response, next) {
 
     if (error) {
         response.status(400).json({ success: false, error })
+    } else {
+        next()
     }
-    next()
 }
 
 async function auth(request, response, next) {
