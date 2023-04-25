@@ -4,9 +4,9 @@ const { v4: uuidv4 } = require('uuid');
 
 async function insertNewUser(newUser) {
 
-    const usernameAlreadyExists = await findUser(newUser.username)
+    const usernameAlreadyExists = await db.users.findOne({username: newUser.username})
     if (usernameAlreadyExists) {
-        throw new Error('Username already exists in database')
+        throw new Error('400 Username already exists in database')
     }
 
     let finalObject = { 
@@ -21,18 +21,19 @@ async function insertNewUser(newUser) {
 
 async function login(user) {
     const userInDb = await findUser(user.username)
-    if (!userInDb) {
-        throw new Error('Username does not exist in database')
-    }
     const passwordMatch = await comparePassword(user.password, userInDb.password)
     if (!passwordMatch) {
-        throw new Error('Wrong password')
+        throw new Error('401 Wrong password')
     }
     return
 }
 
 async function findUser(username) {
-    return await db.users.findOne({ username })
+    const userInDb = await db.users.findOne({ username })
+    if (!userInDb) {
+        throw new Error("404 Can not find user in database")
+    }
+    return userInDb
 }
 
 module.exports = { insertNewUser, findUser, login }
