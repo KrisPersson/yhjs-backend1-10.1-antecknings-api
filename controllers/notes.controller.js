@@ -7,7 +7,10 @@ async function getNotesCtrl(request, response) {
     try {
         const userInDb = await findUser(request.headers.username)
         const notesFromDb = await getNotes(userInDb.id)
-        response.json({ success: true, notes: notesFromDb })
+        const shavedNotes = notesFromDb.map(note => {
+            return { id: note.id, title: note.title, text: note.text, createdAt: note.createdAt, modifiedAt: note.modifiedAt }
+        })
+        response.json({ success: true, notes: shavedNotes })
     } catch (error) {
         response.status(getStatusCode(error.message))
         .json({ success: false, message: error.message })
@@ -57,8 +60,10 @@ async function deleteNotesCtrl(request, response) {
 async function searchNotesCtrl(request, response) {
     const username = request.headers.username
     const searchQuery = request.headers.searchquery
+    
     try {
         const notes = await searchNote({ username, searchQuery })
+        
         response.json({ success: true, notes })
     } catch (error) {
         response.status(getStatusCode(error.message))

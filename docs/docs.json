@@ -1,0 +1,449 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "API for a notes app",
+        "title": "Notes API",
+        "version": "1.0.0"
+    },
+    "components": {
+        "schemas": {
+            "User input": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Note": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string"
+                    },
+                    "modifiedAt": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+
+    "paths": {
+        "/api/user/signup": {
+            "post": {
+                "description": "Signup",
+                "tags": ["User"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User%20input" 
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Signed up successfully"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "409": {
+                        "description": "Username already exists"
+                    }
+                },
+                "summary": "Signup"
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "description": "Login",
+                "tags": ["User"],
+                "requestBody": {
+                    "required": true,
+                    "description": "Login with an existing user",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User input" 
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Logged in successfully"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "401": {
+                        "description": "Wrong password"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "summary": "Login"
+            }
+        },
+        "/api/user/verify": {
+            "get": {
+                "description": "Verify token",
+                "tags": ["User"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Token valid"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "498": {
+                        "description": "Invalid token"
+                    }
+                },
+                "summary": "Verify token"
+            }
+        },
+        "/api/notes": {
+            "get": {
+                "description": "Get all notes for a specific user",
+                "tags": ["Notes"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "notes": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Note"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns an array of the user's saved notes"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "498": {
+                        "description": "Invalid token"
+                    }
+                },
+                "summary": "Get all notes for a user"
+            },
+            "post": {
+                "description": "Save a note",
+                "tags": ["Notes"],
+                "requestBody": {
+                    "required": true,
+                    "description": "Save a note",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "newNote": {
+                                            "type": "object",
+                                            "properties": {
+                                                "noteId": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Adds a new note to the database"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "498": {
+                        "description": "Invalid token"
+                    }
+                },
+                "summary": "Create a new note for a user"
+            },
+            "put": {
+                "description": "Edit a note",
+                "tags": ["Notes"],
+                "requestBody": {
+                    "required": true,
+                    "description": "Edit a note",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "noteId": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Edits an existing note"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "498": {
+                        "description": "Invalid token"
+                    }
+                },
+                "summary": "Edit an existing note"
+            },
+            "delete": {
+                "description": "Delete a note",
+                "tags": ["Notes"],
+                "requestBody": {
+                    "required": true,
+                    "description": "Delete a note",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "noteId": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Deletes a specified note from the database"
+                    },
+                    "400": {
+                        "description": "Wrong input format in body"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "498": {
+                        "description": "Invalid token"
+                    }
+                },
+                "summary": "Delete an existing note"
+            }
+    },
+    "/api/notes/search": {
+        "get": {
+            "description": "Search notes (title field)",
+            "tags": ["Notes"],
+            "responses": {
+                "200": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "success": {
+                                        "type": "boolean"
+                                    },
+                                    "notes": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Note"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Returns an array of the user's saved notes"
+                },
+                "400": {
+                    "description": "Wrong input format in body"
+                },
+                "404": {
+                    "description": "User not found"
+                },
+                "498": {
+                    "description": "Invalid token"
+                }
+            },
+            "summary": "Get all notes for a user"
+        }
+    },
+    
+    "tags": [
+        {
+            "name": "User",
+            "description": ""
+        },
+        {
+            "name": "Notes",
+            "description": ""
+        }
+    ]
+}
+}

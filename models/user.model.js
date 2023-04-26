@@ -6,7 +6,7 @@ async function insertNewUser(newUser) {
 
     const usernameAlreadyExists = await db.users.findOne({username: newUser.username})
     if (usernameAlreadyExists) {
-        throw new Error('400 Username already exists in database')
+        throw new Error('409 Username already exists in database')
     }
 
     let finalObject = { 
