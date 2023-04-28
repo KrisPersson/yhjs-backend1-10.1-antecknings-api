@@ -2,10 +2,6 @@ const Joi = require('joi')
 const secret = 'kjhasdkjasf'
 const jwt = require('jsonwebtoken')
 
-
-
-
-
 const signupLoginBodySchema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).required(),
     password: Joi.string().alphanum().min(3).max(30).required()

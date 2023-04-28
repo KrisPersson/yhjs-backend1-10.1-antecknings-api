@@ -2,7 +2,6 @@ const { db } = require('../database')
 const { v4: uuidv4 } = require('uuid');
 const { findUser } = require('./user.model');
 
-
 async function getNotes(userId) {
     return await db.notes.find({ userId })
 }
@@ -57,7 +56,11 @@ async function searchNote(input) {
     const allUsersNotes = await db.notes.find({ userId: userInDb.id })
     const query = input.searchQuery.toLowerCase()
 
-    return allUsersNotes.filter((note) => note.title.toLowerCase().includes(query))
+    const filteredNotes = allUsersNotes.filter((note) => note.title.toLowerCase().includes(query))
+    const shavedNotes = filteredNotes.map((note) => {
+        return { noteId: note.id, title: note.title, text: note.text, createdAt: note.createdAt, modifiedAt: note.modifiedAt }
+    })
+    return shavedNotes
 }
 
 module.exports = { getNotes, insertNewNote, editNote, deleteNote, searchNote }

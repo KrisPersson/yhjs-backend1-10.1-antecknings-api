@@ -2,7 +2,6 @@ const { findUser } = require('../models/user.model')
 const { getNotes, insertNewNote, editNote, deleteNote, searchNote } = require('../models/notes.model')
 const { getStatusCode } = require('../utils')
 
-
 async function getNotesCtrl(request, response) {
     try {
         const userInDb = await findUser(request.headers.username)
@@ -70,6 +69,5 @@ async function searchNotesCtrl(request, response) {
         .json({ success: false, message: error.message })
     }
 }
-
 
 module.exports = { getNotesCtrl, postNotesCtrl, editNotesCtrl, deleteNotesCtrl, searchNotesCtrl }
